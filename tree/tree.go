@@ -5,19 +5,19 @@ import (
 	"fmt"
 )
 
-type List struct {
+type Node struct {
 	ID       uint
 	ParentId uint
 	Name     string
 }
 
 type Tree struct {
-	List
+	Node
 	Children []Tree
 }
 
 // 生成tree 下级节点
-func TreeChildrenGet(parentId uint, list *[]List, loopCount *uint) (tree []Tree, err error) {
+func TreeChildrenGet(parentId uint, list *[]Node, loopCount *uint) (tree []Tree, err error) {
 
 	*loopCount += 1
 
@@ -47,7 +47,7 @@ func TreeChildrenGet(parentId uint, list *[]List, loopCount *uint) (tree []Tree,
 }
 
 // 生成tree 包含自身节点
-func TreeSelfGet(id uint, list *[]List, loopCount *uint) (tree []Tree, err error) {
+func TreeSelfGet(id uint, list *[]Node, loopCount *uint) (tree []Tree, err error) {
 
 	// 查找自身节点
 	for _, v := range *list {
@@ -71,7 +71,7 @@ func TreeSelfGet(id uint, list *[]List, loopCount *uint) (tree []Tree, err error
 }
 
 // 查找下级id（包括自身id）
-func TreeSelfIds(id uint, listAll *[]List, loopCount *uint) (childrenIds []uint, err error) {
+func TreeSelfIds(id uint, listAll *[]Node, loopCount *uint) (childrenIds []uint, err error) {
 
 	childrenIds = append(childrenIds, id)
 
