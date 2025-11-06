@@ -98,3 +98,19 @@ func TreeSelfIds(id uint, listAll *[]Node, loopCount *uint) (childrenIds []uint,
 
 	return childrenIds, nil
 }
+
+func Tree2List(tree []Tree, list *[]Node) (err error) {
+
+	if tree == nil {
+		return
+	}
+
+	for _, v := range tree {
+
+		*list = append(*list, Node{ID: v.ID, ParentId: v.ParentId, Name: v.Name})
+
+		Tree2List(v.Children, list)
+	}
+
+	return nil
+}
