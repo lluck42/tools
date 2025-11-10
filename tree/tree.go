@@ -114,3 +114,45 @@ func Tree2List(tree []Tree, list *[]Node) (err error) {
 
 	return nil
 }
+
+////////////////////////// 泛型类型树 //////////////////////////
+
+// AnyTree 泛型树结构
+type AnyTree[T any] struct {
+	Data     T
+	Children []AnyTree[T]
+}
+
+// 泛型树生成函数
+func BuildAnyTree[T any](
+	parentId uint,
+	list []T,
+	loopCount *uint,
+	getId func(T) uint,
+	getParentId func(T) uint,
+) ([]AnyTree[T], error) {
+
+	*loopCount++
+
+	if *loopCount >= 1000 {
+		return nil, fmt.Errorf("BuildTree:超出最大循环次数 loopCount:%d", *loopCount)
+	}
+
+	var tree []AnyTree[T]
+	for _, item := range list {
+		if getParentId(item) == parentId {
+			children, err := BuildAnyTree(getId(item), list, loopCount, getId, getParentId)
+			if err != nil {
+				return nil, err
+			}
+
+			node := AnyTree[T]{
+				Data:     item,
+				Children: children,
+			}
+			tree = append(tree, node)
+		}
+	}
+
+	return tree, nil
+}
