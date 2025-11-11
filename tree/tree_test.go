@@ -62,3 +62,47 @@ func TestB(t *testing.T) {
 
 	fmt.Printf("%+v", ids)
 }
+func TestC(t *testing.T) {
+
+	type tree struct {
+		Node
+		Children []tree
+	}
+
+	var listAll []Node
+	var one Node
+	one.ID = 1
+	one.Name = "1"
+	one.ParentId = 0
+
+	var two Node
+	two.ID = 2
+	two.ParentId = 1
+	two.Name = "2"
+
+	var three Node
+	three.ID = 3
+	three.ParentId = 2
+	three.Name = "3"
+
+	listAll = append(listAll, one, two, three)
+
+	// 获取选中节点的树
+	var loopCount uint
+
+	var id uint = 0
+
+	var ids, _ = BuildAnyTree(id, listAll, &loopCount, func(n Node) uint {
+		return n.ID
+	}, func(n Node) uint {
+		return n.ParentId
+	}, func(n Node, child []tree) tree {
+		var one tree
+		one.ID = n.ID
+		one.Name = n.Name
+		one.Children = child
+		return one
+	})
+
+	fmt.Printf("%+v", ids)
+}
