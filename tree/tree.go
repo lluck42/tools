@@ -118,12 +118,12 @@ func Tree2List(tree []Tree, list *[]Node) (err error) {
 ////////////////////////// 泛型类型树 //////////////////////////
 
 // 泛型树生成函数
-func BuildAnyTree[L, T any](
-	parentId uint,
+func BuildAnyTree[L, T any, I comparable](
+	parentId I,
 	list []L,
 	loopCount *uint,
-	getId func(L) uint,
-	getParentId func(L) uint,
+	getId func(L) I,
+	getParentId func(L) I,
 	getData func(L, []T) T,
 ) ([]T, error) {
 
