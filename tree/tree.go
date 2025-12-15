@@ -21,7 +21,7 @@ func TreeChildrenGet(parentId uint, list *[]Node, loopCount *uint) (tree []Tree,
 
 	*loopCount += 1
 
-	if *loopCount >= 1000 {
+	if *loopCount >= 100000 {
 		var errStr = fmt.Sprintf("TreeChildrenGet:超出最大循环次数 loopCount:%d 请检查组织架构是否有循环依赖！", *loopCount)
 		return nil, errors.New(errStr)
 	}
@@ -77,7 +77,7 @@ func TreeSelfIds(id uint, listAll *[]Node, loopCount *uint) (childrenIds []uint,
 
 	*loopCount += 1
 
-	if *loopCount >= 1000 {
+	if *loopCount >= 100000 {
 		var errStr = fmt.Sprintf("MyIds:超出最大循环次数 loopCount:%d 请检查组织架构是否有循环依赖！", *loopCount)
 		return nil, errors.New(errStr)
 	}
@@ -129,7 +129,7 @@ func BuildAnyTree[L, T any, I comparable](
 
 	*loopCount++
 
-	if *loopCount >= 1000 {
+	if *loopCount >= 100000 {
 		return nil, fmt.Errorf("BuildTree:超出最大循环次数 loopCount:%d", *loopCount)
 	}
 
