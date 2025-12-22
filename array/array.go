@@ -1,5 +1,11 @@
 package array
 
+import (
+	"fmt"
+	"strconv"
+	"strings"
+)
+
 func InArray[T comparable](target T, array []T) bool {
 	for _, item := range array {
 		if item == target {
@@ -38,4 +44,26 @@ func RemoveDuplicates[T comparable](slice []T) []T {
 		}
 	}
 	return result
+}
+
+func StringToUintSlice(s string, sep string) ([]uint, error) {
+	parts := strings.Split(s, sep)
+	result := make([]uint, 0, len(parts))
+
+	for _, part := range parts {
+		// 去除可能的空格
+		part = strings.TrimSpace(part)
+		if part == "" {
+			continue
+		}
+
+		// 先转成uint64，再转为uint
+		val, err := strconv.ParseUint(part, 10, 0) // 0表示用当前系统的uint位数
+		if err != nil {
+			return nil, fmt.Errorf("无效的数字: %s", part)
+		}
+		result = append(result, uint(val))
+	}
+
+	return result, nil
 }
