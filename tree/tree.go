@@ -70,6 +70,34 @@ func TreeSelfGet(id uint, list *[]Node, loopCount *uint) (tree []Tree, err error
 	return tree, nil
 }
 
+// 查找下级id（不包括自身id）
+func TreeIds(id uint, listAll *[]Node, loopCount *uint) (childrenIds []uint, err error) {
+
+	*loopCount += 1
+
+	if *loopCount >= 100000 {
+		var errStr = fmt.Sprintf("MyIds:超出最大循环次数 loopCount:%d 请检查组织架构是否有循环依赖！", *loopCount)
+		return nil, errors.New(errStr)
+	}
+
+	// 查找子节点
+	for _, v := range *listAll {
+		if v.ParentId == id {
+			// 先把当前子节点id加入结果
+			childrenIds = append(childrenIds, v.ID)
+			// 递归
+			var childIds, err = TreeIds(v.ID, listAll, loopCount)
+			if err != nil {
+				return nil, err
+			}
+
+			childrenIds = append(childrenIds, childIds...)
+		}
+	}
+
+	return childrenIds, nil
+}
+
 // 查找下级id（包括自身id）
 func TreeSelfIds(id uint, listAll *[]Node, loopCount *uint) (childrenIds []uint, err error) {
 
